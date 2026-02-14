@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Globalization;
 using AimPointGenerator.Models;
 
 namespace AimPointGenerator.Services;
@@ -44,7 +45,11 @@ public static class AimPointImageGenerator
             var scopeText = CreateText(data.ScopeName, typeface, 12, textBrush);
             scopeText.TextAlignment = TextAlignment.Right;
             dc.DrawText(scopeText, new Point(ImageSize - sideMargin, 8));
-            var hintText = CreateText("Target:Zeroing (e.g. 200:150)", typeface, 9, textBrush);
+            var hasNonZeroZeroing = data.AimPointItems.Any(x => !IsZero(x.ZeroingDistance));
+            var hintContent = hasNonZeroZeroing
+                ? "Target : Zeroing (e.g. 200 : 150)"
+                : "Target (e.g. 200)";
+            var hintText = CreateText(hintContent, typeface, 9, textBrush);
             hintText.TextAlignment = TextAlignment.Right;
             dc.DrawText(hintText, new Point(ImageSize - sideMargin, 26));
 
@@ -65,7 +70,7 @@ public static class AimPointImageGenerator
             maxZoomText.TextAlignment = TextAlignment.Right;
             dc.DrawText(maxZoomText, new Point(CenterX + MaxPointExtent + ZoomLabelPush - 5, zoomLabelY));
 
-            DrawAimPointsShared(dc, data.AimPointItems, CenterX, CenterY, typeface, textBrush, reticleBrush);
+            DrawAimPointsShared(dc, data.AimPointItems, data.EffectiveRange, CenterX, CenterY, typeface, textBrush, reticleBrush);
 
             dc.Pop();
         }
@@ -75,12 +80,11 @@ public static class AimPointImageGenerator
         return renderBitmap;
     }
 
-    private static void DrawAimPointsShared(DrawingContext dc, List<AimPointItem> allItems,
+    private static void DrawAimPointsShared(DrawingContext dc, List<AimPointItem> allItems, double effectiveRange,
         double centerX, double centerY, Typeface typeface, Brush textBrush, Brush reticleBrush)
     {
-        var minItems = allItems.Where(x => x.IsMinZoom).ToList();
-        var maxItems = allItems.Where(x => !x.IsMinZoom).ToList();
         var allPositions = allItems.Select(x => x.AimPosition).ToList();
+        var allZeroing = allItems.Count == 0 || allItems.All(x => IsZero(x.ZeroingDistance));
 
         if (allPositions.Count == 0) return;
 
@@ -91,22 +95,24 @@ public static class AimPointImageGenerator
         posExtent = Math.Max(posExtent, negExtent);
         negExtent = Math.Max(negExtent, posExtent);
 
-        var minDataByPos = new Dictionary<int, AimPointItem>();
-        var maxDataByPos = new Dictionary<int, AimPointItem>();
-        foreach (var item in minItems)
+        // 같은 조준 위치 처리: allItems 순서 유지
+        // Min/Max는 분리해서 같은 위치에서 각각 1줄로 결합 표시
+        var minItemsByPos = new Dictionary<int, List<AimPointItem>>();
+        var maxItemsByPos = new Dictionary<int, List<AimPointItem>>();
+        foreach (var item in allItems)
         {
-            if (Math.Abs(item.AimPosition - Math.Round(item.AimPosition)) < 0.001)
+            if (Math.Abs(item.AimPosition - Math.Round(item.AimPosition)) >= 0.001 || Math.Abs(item.AimPosition) < 0.001) continue;
+            var pos = (int)Math.Round(item.AimPosition);
+            if (pos == 0) continue;
+            if (item.IsMinZoom)
             {
-                var pos = (int)Math.Round(item.AimPosition);
-                if (pos != 0 && !minDataByPos.ContainsKey(pos)) minDataByPos[pos] = item;
+                if (!minItemsByPos.ContainsKey(pos)) minItemsByPos[pos] = new List<AimPointItem>();
+                minItemsByPos[pos].Add(item);
             }
-        }
-        foreach (var item in maxItems)
-        {
-            if (Math.Abs(item.AimPosition - Math.Round(item.AimPosition)) < 0.001)
+            else
             {
-                var pos = (int)Math.Round(item.AimPosition);
-                if (pos != 0 && !maxDataByPos.ContainsKey(pos)) maxDataByPos[pos] = item;
+                if (!maxItemsByPos.ContainsKey(pos)) maxItemsByPos[pos] = new List<AimPointItem>();
+                maxItemsByPos[pos].Add(item);
             }
         }
 
@@ -121,16 +127,34 @@ public static class AimPointImageGenerator
 
             dc.DrawEllipse(reticleBrush, null, new Point(centerX, y), dotRadius, dotRadius);
 
-            if (minDataByPos.TryGetValue(pos, out var minItem) && (minItem.ZeroingDistance != 0 || minItem.TargetDistance != 0))
+            if (minItemsByPos.TryGetValue(pos, out var minPosList))
             {
-                var label = $"{minItem.TargetDistance}:{minItem.ZeroingDistance}";
-                var ft = CreateText(label, typeface, 8, textBrush);
-                dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                var labels = minPosList
+                    .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)
+                    .Select(m => BuildItemLabel(m, effectiveRange, allZeroing))
+                    .ToList();
+                labels.Reverse();
+
+                if (labels.Count > 0)
+                {
+                    var combinedLabel = string.Join(" - ", labels);
+                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                }
             }
-            if (maxDataByPos.TryGetValue(pos, out var maxItem) && (maxItem.ZeroingDistance != 0 || maxItem.TargetDistance != 0))
+            if (maxItemsByPos.TryGetValue(pos, out var maxPosList))
             {
-                var label = $"{maxItem.TargetDistance}:{maxItem.ZeroingDistance}";
-                dc.DrawText(CreateText(label, typeface, 8, textBrush), new Point(centerX + dotRadius + 10, y - 4));
+                var labels = maxPosList
+                    .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)
+                    .Select(m => BuildItemLabel(m, effectiveRange, allZeroing))
+                    .ToList();
+
+                if (labels.Count > 0)
+                {
+                    var combinedLabel = string.Join(" - ", labels);
+                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - 4));
+                }
             }
         }
 
@@ -142,34 +166,67 @@ public static class AimPointImageGenerator
 
             dc.DrawEllipse(reticleBrush, null, new Point(centerX, y), dotRadius, dotRadius);
 
-            if (minDataByPos.TryGetValue(pos, out var minItem) && (minItem.ZeroingDistance != 0 || minItem.TargetDistance != 0))
+            if (minItemsByPos.TryGetValue(pos, out var minNegList))
             {
-                var label = $"{minItem.TargetDistance}:{minItem.ZeroingDistance}";
-                var ft = CreateText(label, typeface, 8, textBrush);
-                dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                var labels = minNegList
+                    .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)
+                    .Select(m => BuildItemLabel(m, effectiveRange, allZeroing))
+                    .ToList();
+                labels.Reverse();
+
+                if (labels.Count > 0)
+                {
+                    var combinedLabel = string.Join(" - ", labels);
+                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                }
             }
-            if (maxDataByPos.TryGetValue(pos, out var maxItem) && (maxItem.ZeroingDistance != 0 || maxItem.TargetDistance != 0))
+            if (maxItemsByPos.TryGetValue(pos, out var maxNegList))
             {
-                var label = $"{maxItem.TargetDistance}:{maxItem.ZeroingDistance}";
-                dc.DrawText(CreateText(label, typeface, 8, textBrush), new Point(centerX + dotRadius + 10, y - 4));
+                var labels = maxNegList
+                    .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)
+                    .Select(m => BuildItemLabel(m, effectiveRange, allZeroing))
+                    .ToList();
+
+                if (labels.Count > 0)
+                {
+                    var combinedLabel = string.Join(" - ", labels);
+                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - 4));
+                }
             }
         }
 
-        foreach (var item in allItems.Where(x => Math.Abs(x.AimPosition - Math.Round(x.AimPosition)) >= 0.001 && Math.Abs(x.AimPosition) > 0.001))
+        var nonIntegerGroups = allItems
+            .Where(x => Math.Abs(x.AimPosition - Math.Round(x.AimPosition)) >= 0.001 && Math.Abs(x.AimPosition) > 0.001)
+            .GroupBy(x => new { Pos = Math.Round(x.AimPosition, 3), x.IsMinZoom });
+
+        foreach (var group in nonIntegerGroups)
         {
-            var range = Math.Max(item.AimPosition > 0 ? posExtent : negExtent, 1);
-            var ratio = Math.Abs(item.AimPosition) / range;
-            var offset = MaxPointExtent * ratio * (item.AimPosition >= 0 ? 1 : -1);
+            var aimPosition = group.First().AimPosition;
+            var range = Math.Max(aimPosition > 0 ? posExtent : negExtent, 1);
+            var ratio = Math.Abs(aimPosition) / range;
+            var offset = MaxPointExtent * ratio * (aimPosition >= 0 ? 1 : -1);
             var y = centerY + offset;
 
             var lineLen = dotRadius * 1.2;
             dc.DrawLine(new Pen(reticleBrush, 1), new Point(centerX - lineLen, y), new Point(centerX + lineLen, y));
-            var label = $"{item.TargetDistance}:{item.ZeroingDistance}";
-            var ft = CreateText(label, typeface, 8, textBrush);
-            if (item.IsMinZoom)
-                dc.DrawText(ft, new Point(centerX - lineLen - 10 - ft.Width, y - 4));
-            else
-                dc.DrawText(ft, new Point(centerX + lineLen + 10, y - 4));
+
+            var labels = group
+                .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)
+                .Select(m => BuildItemLabel(m, effectiveRange, allZeroing))
+                .ToList();
+            if (group.Key.IsMinZoom) labels.Reverse();
+
+            if (labels.Count > 0)
+            {
+                var combinedLabel = string.Join(" - ", labels);
+                var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                if (group.Key.IsMinZoom)
+                    dc.DrawText(ft, new Point(centerX - lineLen - 10 - ft.Width, y - 4));
+                else
+                    dc.DrawText(ft, new Point(centerX + lineLen + 10, y - 4));
+            }
         }
     }
 
@@ -187,5 +244,24 @@ public static class AimPointImageGenerator
         encoder.Frames.Add(BitmapFrame.Create(bitmap));
         using var stream = File.Create(filePath);
         encoder.Save(stream);
+    }
+
+    private static string BuildItemLabel(AimPointItem item, double effectiveRange, bool allZeroing)
+    {
+        var target = FormatNumber(item.TargetDistance);
+        if (allZeroing) return target;
+
+        var zeroing = IsZero(item.ZeroingDistance) ? effectiveRange : item.ZeroingDistance;
+        return $"{target}:{FormatNumber(zeroing)}";
+    }
+
+    private static bool IsZero(double value)
+    {
+        return Math.Abs(value) < 0.001;
+    }
+
+    private static string FormatNumber(double value)
+    {
+        return value.ToString("0.###############", CultureInfo.InvariantCulture);
     }
 }
