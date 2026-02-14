@@ -33,6 +33,9 @@ bld/
 **/[Pp]ackages/*
 !**/[Pp]ackages/build/
 
+# Local helper scripts (not for distribution)
+GITHUB_PUSH.ps1
+
 # User-specific
 *.rsuser
 *.suo
