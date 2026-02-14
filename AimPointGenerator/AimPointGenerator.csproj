@@ -11,4 +11,13 @@
     <AssemblyName>AimPointGenerator</AssemblyName>
   </PropertyGroup>
 
+  <Target Name="ZipPublish" AfterTargets="Publish" Condition="'$(PublishProfile)'=='Simple'">
+    <PropertyGroup>
+      <ZipFileName>AimPointGenerator-v1.1.0-win-x64.zip</ZipFileName>
+      <ZipPath>$(ProjectDir)..\$(ZipFileName)</ZipPath>
+    </PropertyGroup>
+    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ZipPath)" Overwrite="true" />
+    <Message Importance="high" Text="Created: $(ZipPath)" />
+  </Target>
+
 </Project>

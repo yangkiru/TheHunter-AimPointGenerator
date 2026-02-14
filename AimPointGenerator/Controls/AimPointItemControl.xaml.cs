@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AimPointGenerator.Models;
 
 namespace AimPointGenerator.Controls;
@@ -31,14 +33,80 @@ public partial class AimPointItemControl : UserControl
 
     public void SyncToItem()
     {
-        if (double.TryParse(TargetBox.Text, out var t)) Item.TargetDistance = t;
-        if (double.TryParse(ZeroingBox.Text, out var z)) Item.ZeroingDistance = z;
-        if (double.TryParse(AimPositionBox.Text, out var a))
+        if (TryParseNumericInput(TargetBox.Text, out var t, out var normalizedTarget))
         {
+            Item.TargetDistance = t;
+            if (TargetBox.Text != normalizedTarget) TargetBox.Text = normalizedTarget;
+        }
+
+        if (TryParseNumericInput(ZeroingBox.Text, out var z, out var normalizedZeroing))
+        {
+            Item.ZeroingDistance = z;
+            if (ZeroingBox.Text != normalizedZeroing) ZeroingBox.Text = normalizedZeroing;
+        }
+
+        if (TryParseNumericInput(AimPositionBox.Text, out var a, out var normalizedAim))
+        {
+            if (AimPositionBox.Text != normalizedAim) AimPositionBox.Text = normalizedAim;
             Item.AimPosition = Math.Clamp(a, -10, 10);
             if (Math.Abs(a - Item.AimPosition) > 0.001)
-                AimPositionBox.Text = Item.AimPosition.ToString();
+                AimPositionBox.Text = FormatNumber(Item.AimPosition);
         }
+    }
+
+    private static bool TryParseNumericInput(string raw, out double value, out string normalized)
+    {
+        value = 0;
+        normalized = raw;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+
+        var input = raw.Trim();
+        if (TryEvaluateExpression(input, out value))
+        {
+            normalized = FormatNumber(value);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool TryEvaluateExpression(string input, out double value)
+    {
+        value = 0;
+
+        // .5 / -.5 / +.5 형태를 0.5 계열로 보정
+        input = Regex.Replace(input, @"(?<=^|[+\-*/\s])([+-]?)\.(\d+)", "${1}0.$2");
+
+        if (double.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            return true;
+        if (double.TryParse(input, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
+            return true;
+
+        var match = Regex.Match(input, @"^\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*([+\-*/])\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*$");
+        if (!match.Success) return false;
+
+        if (!double.TryParse(match.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var left))
+            return false;
+        if (!double.TryParse(match.Groups[3].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var right))
+            return false;
+
+        switch (match.Groups[2].Value)
+        {
+            case "+": value = left + right; return true;
+            case "-": value = left - right; return true;
+            case "*": value = left * right; return true;
+            case "/":
+                if (Math.Abs(right) < 0.0000001) return false;
+                value = left / right;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static string FormatNumber(double value)
+    {
+        return value.ToString("0.###############", CultureInfo.InvariantCulture);
     }
 
     private void MinMaxButton_Click(object sender, RoutedEventArgs e)
