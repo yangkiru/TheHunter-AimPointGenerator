@@ -5,7 +5,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*" MinWidth="68"/>
+                <ColumnDefinition Width="*" MinWidth="0"/>
                 <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
             <Border x:Name="DragHandle" Grid.Column="0" Width="16" Margin="0" Cursor="SizeAll"
@@ -16,7 +16,7 @@
             </Border>
             <TextBlock x:Name="FileNameText" Grid.Column="1" Margin="4" Padding="4"
                        Foreground="#90EE90" FontSize="10" VerticalAlignment="Center"
-                       TextTrimming="CharacterEllipsis"/>
+                       TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
             <Button Grid.Column="2" Content="Delete" Width="40" Margin="4" Click="DeleteButton_Click"
                     Background="#5a2020" Foreground="White" BorderThickness="0"/>
         </Grid>

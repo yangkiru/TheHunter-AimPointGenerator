@@ -16,6 +16,7 @@ public partial class CombineImageItemControl : UserControl
         InitializeComponent();
         FilePath = filePath;
         FileNameText.Text = System.IO.Path.GetFileName(filePath);
+        FileNameText.ToolTip = filePath;
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)

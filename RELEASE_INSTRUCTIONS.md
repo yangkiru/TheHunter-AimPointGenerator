@@ -1,35 +1,42 @@
-# GitHub Release 생성 방법
+﻿# GitHub Release ?앹꽦 諛⑸쾿
 
-exe 파일을 GitHub Release로 올리면 사람들이 쉽게 다운로드할 수 있습니다.
+## 諛⑸쾿 1: ?ㅽ겕由쏀듃 (沅뚯옣)
 
-## 1. GitHub Releases 페이지 열기
+1. GitHub CLI 濡쒓렇??(理쒖큹 1??:
+   ```
+   gh auth login
+   ```
 
-https://github.com/yangkiru/TheHunter-AimPointGenerator/releases/new
+2. 由대━???앹꽦:
+   ```
+   .\create-release.ps1
+   ```
 
-## 2. Release 정보 입력
+## 諛⑸쾿 2: ?뱀뿉???섎룞 ?앹꽦
 
-- **Choose a tag**: `v1.0.0` 선택 (이미 푸시됨)
-- **Release title**: `v1.0.0`
-- **Description** (예시):
-  ```
-  ## AimPoint Generator v1.0.0
-  
-  theHunter: Call of the Wild 게임용 AimPoint 이미지 생성기
-  
-  ### 다운로드
-  - **AimPointGenerator-v1.0.0-win-x64.zip** - Windows 64비트 (약 75MB, 압축)
-  - .NET 설치 불필요 (독립 실행)
-  
-  ### 사용법
-  1. zip 압축 해제
-  2. AimPointGenerator.exe 실행
-  ```
+1. https://github.com/yangkiru/TheHunter-AimPointGenerator/releases/new
 
-## 3. 파일 업로드
+2. **Choose a tag**: `v1.1.1` ?앹꽦
 
-- "Attach binaries by dropping them here or selecting them" 영역에
-- `Publish\AimPointGenerator-v1.0.0-win-x64.zip` 파일을 드래그 앤 드롭
+3. **Release title**: `v1.1.1`
 
-## 4. "Publish release" 클릭
+4. **Description**:
+   ```
+   ## AimPoint Generator v1.1.1
 
-완료! 이제 릴리스 페이지에서 다운로드 링크가 표시됩니다.
+   theHunter: Call of the Wild game AimPoint image generator
+
+   ### Changes
+   - Min/Max placement: Min on left, Max on right
+   - Arithmetic input: e.g. 2*2, 150/2, .5 -> 0.5
+   - Zeroing 0 handling: Target only when all zeroing is 0
+   - Single exe publish with zip
+
+   ### Download
+   - **AimPointGenerator-v1.1.1-win-x64.zip** - Windows 64-bit
+   - No .NET installation required (self-contained)
+   ```
+
+5. `AimPointGenerator-v1.1.1-win-x64.zip` ?뚯씪 ?낅줈??
+
+6. "Publish release" ?대┃
