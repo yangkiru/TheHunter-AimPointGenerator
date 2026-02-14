@@ -2,6 +2,10 @@
 
 A program to generate AimPoint (reticle) images for use in the game.
 
+## Download
+
+**[Latest Release](https://github.com/yangkiru/TheHunter-AimPointGenerator/releases/latest)** - Windows 64-bit exe (no .NET installation required)
+
 ## How to Run
 
 ```bash
