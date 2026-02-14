@@ -360,6 +360,7 @@ public partial class MainWindow
             DataStorage.Save(data, savePath);
             _lastLoadedPath = savePath;
             StatusText.Text = $"Saved: {Path.GetFileName(savePath)}";
+            MessageBox.Show($"Saved: {Path.GetFileName(savePath)}", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         else
         {
@@ -373,6 +374,7 @@ public partial class MainWindow
 
             DataStorage.Save(data, savePath);
             StatusText.Text = $"Saved: {Path.GetFileName(savePath)}";
+            MessageBox.Show($"Saved: {Path.GetFileName(savePath)}", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -394,6 +396,7 @@ public partial class MainWindow
         DataStorage.Save(data, dialog.FileName);
         _lastLoadedPath = dialog.FileName;
         StatusText.Text = $"Saved: {Path.GetFileName(dialog.FileName)}";
+        MessageBox.Show($"Saved: {Path.GetFileName(dialog.FileName)}", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void ApplyData(AimPointData data)

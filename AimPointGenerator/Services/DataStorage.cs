@@ -21,9 +21,17 @@ public static class DataStorage
 
     /// <summary>
     /// 실행파일이 있는 폴더 경로
+    /// 단일 exe 빌드 시 AppDomain.BaseDirectory는 temp 폴더를 가리키므로 ProcessPath 사용
     /// </summary>
     public static string GetExeDirectory()
     {
+        var processPath = Environment.ProcessPath;
+        if (!string.IsNullOrEmpty(processPath))
+        {
+            var dir = Path.GetDirectoryName(processPath);
+            if (!string.IsNullOrEmpty(dir))
+                return Path.GetFullPath(dir);
+        }
         var path = AppDomain.CurrentDomain.BaseDirectory;
         return Path.GetFullPath(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
     }

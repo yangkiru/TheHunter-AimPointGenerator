@@ -13,7 +13,7 @@
 
   <Target Name="ZipPublish" AfterTargets="Publish" Condition="'$(PublishProfile)'=='Simple'">
     <PropertyGroup>
-      <ZipFileName>AimPointGenerator-v1.1.1-win-x64.zip</ZipFileName>
+      <ZipFileName>AimPointGenerator-v1.1.2-win-x64.zip</ZipFileName>
       <ZipPath>$(ProjectDir)..\$(ZipFileName)</ZipPath>
     </PropertyGroup>
     <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ZipPath)" Overwrite="true" />

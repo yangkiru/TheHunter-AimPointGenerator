@@ -36,6 +36,7 @@ bld/
 
 # Local helper scripts (not for distribution)
 GITHUB_PUSH.ps1
+create-release.ps1
 
 # User-specific
 *.rsuser
