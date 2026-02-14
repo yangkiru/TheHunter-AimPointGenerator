@@ -139,7 +139,7 @@ public static class AimPointImageGenerator
                 {
                     var combinedLabel = string.Join(" - ", labels);
                     var ft = CreateText(combinedLabel, typeface, 8, textBrush);
-                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - ft.Height / 2));
                 }
             }
             if (maxItemsByPos.TryGetValue(pos, out var maxPosList))
@@ -153,7 +153,7 @@ public static class AimPointImageGenerator
                 {
                     var combinedLabel = string.Join(" - ", labels);
                     var ft = CreateText(combinedLabel, typeface, 8, textBrush);
-                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - 4));
+                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - ft.Height / 2));
                 }
             }
         }
@@ -178,7 +178,7 @@ public static class AimPointImageGenerator
                 {
                     var combinedLabel = string.Join(" - ", labels);
                     var ft = CreateText(combinedLabel, typeface, 8, textBrush);
-                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - 4));
+                    dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - ft.Height / 2));
                 }
             }
             if (maxItemsByPos.TryGetValue(pos, out var maxNegList))
@@ -192,7 +192,7 @@ public static class AimPointImageGenerator
                 {
                     var combinedLabel = string.Join(" - ", labels);
                     var ft = CreateText(combinedLabel, typeface, 8, textBrush);
-                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - 4));
+                    dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - ft.Height / 2));
                 }
             }
         }
@@ -223,9 +223,9 @@ public static class AimPointImageGenerator
                 var combinedLabel = string.Join(" - ", labels);
                 var ft = CreateText(combinedLabel, typeface, 8, textBrush);
                 if (group.Key.IsMinZoom)
-                    dc.DrawText(ft, new Point(centerX - lineLen - 10 - ft.Width, y - 4));
+                    dc.DrawText(ft, new Point(centerX - lineLen - 10 - ft.Width, y - ft.Height / 2));
                 else
-                    dc.DrawText(ft, new Point(centerX + lineLen + 10, y - 4));
+                    dc.DrawText(ft, new Point(centerX + lineLen + 10, y - ft.Height / 2));
             }
         }
     }
