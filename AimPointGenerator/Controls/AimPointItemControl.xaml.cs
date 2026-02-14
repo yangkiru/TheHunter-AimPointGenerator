@@ -141,6 +141,14 @@ public partial class AimPointItemControl : UserControl
         ValueChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    private void NumericBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not TextBox box) return;
+        box.Focus();
+        box.SelectAll();
+        e.Handled = true;
+    }
+
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         DeleteRequested?.Invoke(this, EventArgs.Empty);

@@ -19,13 +19,13 @@
             </Border>
             <TextBox x:Name="TargetBox" Grid.Column="1" Margin="4" Padding="4" MinWidth="60"
                      Background="#0d1f0d" Foreground="#90EE90" CaretBrush="#90EE90" BorderBrush="#2d5a2d" BorderThickness="1"
-                     ToolTip="Target distance (m)"/>
+                     ToolTip="Target distance (m)" PreviewMouseLeftButtonDown="NumericBox_PreviewMouseLeftButtonDown"/>
             <TextBox x:Name="ZeroingBox" Grid.Column="2" Margin="4" Padding="4" MinWidth="60"
                      Background="#0d1f0d" Foreground="#90EE90" CaretBrush="#90EE90" BorderBrush="#2d5a2d" BorderThickness="1"
-                     ToolTip="Zeroing distance (m)"/>
+                     ToolTip="Zeroing distance (m)" PreviewMouseLeftButtonDown="NumericBox_PreviewMouseLeftButtonDown"/>
             <TextBox x:Name="AimPositionBox" Grid.Column="3" Margin="4" Padding="4"
                      Background="#0d1f0d" Foreground="#90EE90" CaretBrush="#90EE90" BorderBrush="#2d5a2d" BorderThickness="1"
-                     ToolTip="Point"/>
+                     ToolTip="Point" PreviewMouseLeftButtonDown="NumericBox_PreviewMouseLeftButtonDown"/>
             <Button x:Name="MinMaxButton" Grid.Column="4" Content="Max" Width="50" Margin="4"
                     Background="#2d5a2d" Foreground="White" BorderThickness="0"
                     Click="MinMaxButton_Click"/>
