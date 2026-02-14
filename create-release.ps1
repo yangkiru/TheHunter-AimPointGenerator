@@ -1,8 +1,8 @@
-# GitHub Release v1.1.2 생성
+# GitHub Release v1.1.3 생성
 # 먼저 실행: gh auth login
 
 $ErrorActionPreference = "Stop"
-$zipPath = Join-Path $PSScriptRoot "AimPointGenerator-v1.1.2-win-x64.zip"
+$zipPath = Join-Path $PSScriptRoot "AimPointGenerator-v1.1.3-win-x64.zip"
 
 if (-not (Test-Path $zipPath)) {
     Write-Host "Creating zip..." -ForegroundColor Yellow
@@ -11,20 +11,19 @@ if (-not (Test-Path $zipPath)) {
     Pop-Location
 }
 
-Write-Host "Creating release v1.1.2..." -ForegroundColor Cyan
-gh release create v1.1.2 $zipPath `
-  --title "v1.1.2" `
+Write-Host "Creating release v1.1.3..." -ForegroundColor Cyan
+gh release create v1.1.3 $zipPath `
+  --title "v1.1.3" `
   --notes @"
-## AimPoint Generator v1.1.2
+## AimPoint Generator v1.1.3
 
 theHunter: Call of the Wild game AimPoint image generator
 
 ### Changes
-- Save confirmation MessageBox
-- Exe path fix for single-file (Environment.ProcessPath)
+- Fix decimal input (2.5) when .5 auto-convert is enabled
 
 ### Download
-- **AimPointGenerator-v1.1.2-win-x64.zip** - Windows 64-bit
+- **AimPointGenerator-v1.1.3-win-x64.zip** - Windows 64-bit
 - No .NET installation required (self-contained)
 "@
 

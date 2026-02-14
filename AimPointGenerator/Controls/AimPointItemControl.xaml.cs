@@ -36,22 +36,33 @@ public partial class AimPointItemControl : UserControl
         if (TryParseNumericInput(TargetBox.Text, out var t, out var normalizedTarget))
         {
             Item.TargetDistance = t;
-            if (TargetBox.Text != normalizedTarget) TargetBox.Text = normalizedTarget;
+            if (!IsTypingDecimal(TargetBox.Text) && TargetBox.Text != normalizedTarget) TargetBox.Text = normalizedTarget;
         }
 
         if (TryParseNumericInput(ZeroingBox.Text, out var z, out var normalizedZeroing))
         {
             Item.ZeroingDistance = z;
-            if (ZeroingBox.Text != normalizedZeroing) ZeroingBox.Text = normalizedZeroing;
+            if (!IsTypingDecimal(ZeroingBox.Text) && ZeroingBox.Text != normalizedZeroing) ZeroingBox.Text = normalizedZeroing;
         }
 
         if (TryParseNumericInput(AimPositionBox.Text, out var a, out var normalizedAim))
         {
-            if (AimPositionBox.Text != normalizedAim) AimPositionBox.Text = normalizedAim;
             Item.AimPosition = Math.Clamp(a, -10, 10);
-            if (Math.Abs(a - Item.AimPosition) > 0.001)
-                AimPositionBox.Text = FormatNumber(Item.AimPosition);
+            if (!IsTypingDecimal(AimPositionBox.Text))
+            {
+                if (AimPositionBox.Text != normalizedAim) AimPositionBox.Text = normalizedAim;
+                if (Math.Abs(a - Item.AimPosition) > 0.001)
+                    AimPositionBox.Text = FormatNumber(Item.AimPosition);
+            }
         }
+    }
+
+    /// <summary>
+    /// 입력이 "."으로 끝나면 아직 소수 입력 중 (2.5 입력 가능하도록 텍스트 교체 생략)
+    /// </summary>
+    private static bool IsTypingDecimal(string text)
+    {
+        return !string.IsNullOrEmpty(text) && text.TrimEnd().EndsWith(".");
     }
 
     private static bool TryParseNumericInput(string raw, out double value, out string normalized)

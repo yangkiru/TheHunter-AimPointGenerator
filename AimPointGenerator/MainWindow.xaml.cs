@@ -481,7 +481,8 @@ public partial class MainWindow
 
     private void OnEffectiveRangeChanged()
     {
-        if (TryParseNumericInput(EffectiveRangeBox.Text, out _, out var normalized)
+        if (!IsTypingDecimal(EffectiveRangeBox.Text)
+            && TryParseNumericInput(EffectiveRangeBox.Text, out _, out var normalized)
             && EffectiveRangeBox.Text != normalized)
         {
             EffectiveRangeBox.Text = normalized;
@@ -489,6 +490,11 @@ public partial class MainWindow
         }
 
         RefreshImage();
+    }
+
+    private static bool IsTypingDecimal(string text)
+    {
+        return !string.IsNullOrEmpty(text) && text.TrimEnd().EndsWith(".");
     }
 
     private static bool TryParseNumericInput(string raw, out double value, out string normalized)
