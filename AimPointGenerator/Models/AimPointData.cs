@@ -26,6 +26,11 @@ public class AimPointData
     public List<AimPointItem> AimPointItems { get; set; } = new();
 
     /// <summary>
+    /// 에임 포인트 라벨 폰트 크기 (6~20, 기본 8)
+    /// </summary>
+    public double LabelFontSize { get; set; } = 8;
+
+    /// <summary>
     /// 파일명 생성 (탄환이름_조준경이름)
     /// </summary>
     public string GetFileName()

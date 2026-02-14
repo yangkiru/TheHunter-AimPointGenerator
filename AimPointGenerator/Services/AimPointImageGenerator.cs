@@ -70,7 +70,8 @@ public static class AimPointImageGenerator
             maxZoomText.TextAlignment = TextAlignment.Right;
             dc.DrawText(maxZoomText, new Point(CenterX + MaxPointExtent + ZoomLabelPush - 5, zoomLabelY));
 
-            DrawAimPointsShared(dc, data.AimPointItems, data.EffectiveRange, CenterX, CenterY, typeface, textBrush, reticleBrush);
+            var labelFontSize = Math.Clamp(data.LabelFontSize, 6, 20);
+            DrawAimPointsShared(dc, data.AimPointItems, data.EffectiveRange, CenterX, CenterY, typeface, textBrush, reticleBrush, labelFontSize);
 
             dc.Pop();
         }
@@ -81,7 +82,7 @@ public static class AimPointImageGenerator
     }
 
     private static void DrawAimPointsShared(DrawingContext dc, List<AimPointItem> allItems, double effectiveRange,
-        double centerX, double centerY, Typeface typeface, Brush textBrush, Brush reticleBrush)
+        double centerX, double centerY, Typeface typeface, Brush textBrush, Brush reticleBrush, double labelFontSize)
     {
         var allPositions = allItems.Select(x => x.AimPosition).ToList();
         var allZeroing = allItems.Count == 0 || allItems.All(x => IsZero(x.ZeroingDistance));
@@ -138,7 +139,7 @@ public static class AimPointImageGenerator
                 if (labels.Count > 0)
                 {
                     var combinedLabel = string.Join(" - ", labels);
-                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    var ft = CreateText(combinedLabel, typeface, labelFontSize, textBrush);
                     dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - ft.Height / 2));
                 }
             }
@@ -152,7 +153,7 @@ public static class AimPointImageGenerator
                 if (labels.Count > 0)
                 {
                     var combinedLabel = string.Join(" - ", labels);
-                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    var ft = CreateText(combinedLabel, typeface, labelFontSize, textBrush);
                     dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - ft.Height / 2));
                 }
             }
@@ -177,7 +178,7 @@ public static class AimPointImageGenerator
                 if (labels.Count > 0)
                 {
                     var combinedLabel = string.Join(" - ", labels);
-                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    var ft = CreateText(combinedLabel, typeface, labelFontSize, textBrush);
                     dc.DrawText(ft, new Point(centerX - dotRadius - 10 - ft.Width, y - ft.Height / 2));
                 }
             }
@@ -191,7 +192,7 @@ public static class AimPointImageGenerator
                 if (labels.Count > 0)
                 {
                     var combinedLabel = string.Join(" - ", labels);
-                    var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                    var ft = CreateText(combinedLabel, typeface, labelFontSize, textBrush);
                     dc.DrawText(ft, new Point(centerX + dotRadius + 10, y - ft.Height / 2));
                 }
             }
@@ -221,7 +222,7 @@ public static class AimPointImageGenerator
             if (labels.Count > 0)
             {
                 var combinedLabel = string.Join(" - ", labels);
-                var ft = CreateText(combinedLabel, typeface, 8, textBrush);
+                var ft = CreateText(combinedLabel, typeface, labelFontSize, textBrush);
                 if (group.Key.IsMinZoom)
                     dc.DrawText(ft, new Point(centerX - lineLen - 10 - ft.Width, y - ft.Height / 2));
                 else

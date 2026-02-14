@@ -27,6 +27,7 @@ public partial class MainWindow
         AmmunitionNameBox.TextChanged += (_, _) => RefreshImage();
         EffectiveRangeBox.TextChanged += (_, _) => OnEffectiveRangeChanged();
         ScopeNameBox.TextChanged += (_, _) => RefreshImage();
+        LabelFontSizeBox.TextChanged += (_, _) => OnLabelFontSizeChanged();
 
         Loaded += OnLoaded;
     }
@@ -90,12 +91,17 @@ public partial class MainWindow
             range = parsedRange;
             if (EffectiveRangeBox.Text != normalizedRange) EffectiveRangeBox.Text = normalizedRange;
         }
+        var labelFontSize = 8.0;
+        if (double.TryParse(LabelFontSizeBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed) && parsed >= 6 && parsed <= 20)
+            labelFontSize = parsed;
+
         var data = new AimPointData
         {
             AmmunitionName = AmmunitionNameBox.Text.Trim(),
             EffectiveRange = range,
             ScopeName = ScopeNameBox.Text.Trim(),
-            AimPointItems = new List<AimPointItem>()
+            AimPointItems = new List<AimPointItem>(),
+            LabelFontSize = labelFontSize
         };
 
         foreach (var child in AimPointItemsPanel.Children)
@@ -399,11 +405,36 @@ public partial class MainWindow
         MessageBox.Show($"Saved: {Path.GetFileName(dialog.FileName)}", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
+    private void OnLabelFontSizeChanged()
+    {
+        if (double.TryParse(LabelFontSizeBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var v) && v >= 6 && v <= 20)
+            RefreshImage();
+    }
+
+    private void LabelFontSizeBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (double.TryParse(LabelFontSizeBox.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var v))
+        {
+            var clamped = Math.Clamp(v, 6, 20);
+            if (Math.Abs(v - clamped) > 0.001)
+            {
+                LabelFontSizeBox.Text = clamped.ToString(CultureInfo.InvariantCulture);
+                RefreshImage();
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(LabelFontSizeBox.Text))
+        {
+            LabelFontSizeBox.Text = "8";
+            RefreshImage();
+        }
+    }
+
     private void ApplyData(AimPointData data)
     {
         AmmunitionNameBox.Text = data.AmmunitionName;
         EffectiveRangeBox.Text = data.EffectiveRange.ToString();
         ScopeNameBox.Text = data.ScopeName;
+        LabelFontSizeBox.Text = Math.Clamp(data.LabelFontSize, 6, 20).ToString(CultureInfo.InvariantCulture);
 
         AimPointItemsPanel.Children.Clear();
         foreach (var item in data.AimPointItems)

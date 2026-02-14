@@ -72,11 +72,18 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="Aim Point Data" Foreground="#7CCD7C" FontWeight="Bold" Margin="0,0,0,4"/>
-                            <Grid Grid.Row="1" Margin="0,0,0,4" Width="{Binding ElementName=AimPointScrollViewer, Path=ViewportWidth}">
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                                <TextBlock Text="Label Font Size" Foreground="#90EE90" FontSize="11" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox x:Name="LabelFontSizeBox" Text="8" Width="50" Padding="4" Margin="0,0,0,0"
+                                         Background="#0d1f0d" Foreground="#90EE90" CaretBrush="#90EE90" BorderBrush="#2d5a2d"
+                                         LostFocus="LabelFontSizeBox_LostFocus"/>
+                            </StackPanel>
+                            <Grid Grid.Row="2" Margin="0,0,0,4" Width="{Binding ElementName=AimPointScrollViewer, Path=ViewportWidth}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="16"/>
                                     <ColumnDefinition Width="*" MinWidth="68"/>
@@ -85,17 +92,17 @@
                                     <ColumnDefinition Width="58"/>
                                     <ColumnDefinition Width="48"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="1" Text="Target(m)" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="2" Text="Zeroing(m)" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="3" Text="Point" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="4" Text="Zoom" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
+                                <TextBlock Grid.Column="1" Text="    Target(m)" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
+                                <TextBlock Grid.Column="2" Text="   Zeroing(m)" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
+                                <TextBlock Grid.Column="3" Text=" Point" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
+                                <TextBlock Grid.Column="4" Text=" Zoom" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
                                 <TextBlock Grid.Column="5" Text="" Foreground="#7CCD7C" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
                             </Grid>
-                            <ScrollViewer x:Name="AimPointScrollViewer" Grid.Row="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
+                            <ScrollViewer x:Name="AimPointScrollViewer" Grid.Row="3" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
                                           Margin="0,4,0,0" Padding="0,4,4,4">
                                 <StackPanel x:Name="AimPointItemsPanel"/>
                             </ScrollViewer>
-                            <Button Grid.Row="3" Content="Add Aim Point" Click="AddAimPoint_Click"
+                            <Button Grid.Row="4" Content="Add Aim Point" Click="AddAimPoint_Click"
                                     Padding="10,6" Margin="0,12,0,0"
                                     Background="#2d5a2d" Foreground="White" BorderThickness="0" Cursor="Hand"/>
                         </Grid>
