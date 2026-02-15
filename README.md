@@ -2,6 +2,8 @@
 
 A program to generate AimPoint (reticle) images for use in the game.
 
+![Example AimPoint Image](docs/example.png)
+
 ## Download
 
 **[Latest Release](https://github.com/yangkiru/TheHunter-AimPointGenerator/releases/latest)** - Windows 64-bit single exe (no .NET installation required)
@@ -70,3 +72,11 @@ e.g. `150:200` → Zeroing 150m, Target distance 200m
 
 - Windows 64-bit
 - .NET 7.0 (only when running from source; release exe is self-contained)
+
+## For Developers
+
+To regenerate the README example image:
+```bash
+cd AimPointGenerator
+dotnet run -- --generate-readme-sample
+```
