@@ -38,6 +38,9 @@ bld/
 GITHUB_PUSH.ps1
 create-release.ps1
 
+# Local shortcuts
+ㄷㅂㄱ.bat
+
 # User-specific
 *.rsuser
 *.suo
