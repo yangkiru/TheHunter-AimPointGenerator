@@ -20,20 +20,21 @@ public static class AimPointImageGenerator
     private static readonly double MaxPointExtent = CircleRadius * 4.0 / 5;
     private static readonly double ZoomLabelOffset = 18;
     private static readonly double ZoomLabelPush = 20;
-    private static readonly Color ReticleColor = Color.FromRgb(0, 255, 100);
-    private static readonly Color TextColor = Color.FromRgb(200, 255, 200);
-    private static readonly Color BackgroundColor = Color.FromArgb(220, 0, 25, 0);
-
     public static BitmapSource Generate(AimPointData data)
     {
+        var theme = ThemeManager.Current;
+        var reticleColor = ColorHelper.ParseHex(theme.ImageReticle);
+        var textColor = ColorHelper.ParseHex(theme.ImageText);
+        var backgroundColor = ColorHelper.ParseHex(theme.ImageBackground);
+
         var drawingVisual = new DrawingVisual();
         using (var dc = drawingVisual.RenderOpen())
         {
-            var reticleBrush = new SolidColorBrush(ReticleColor);
-            var textBrush = new SolidColorBrush(TextColor);
+            var reticleBrush = new SolidColorBrush(reticleColor);
+            var textBrush = new SolidColorBrush(textColor);
             var typeface = new Typeface("Segoe UI");
 
-            dc.DrawRectangle(new SolidColorBrush(BackgroundColor), null, new Rect(0, 0, ImageSize, ImageSize));
+            dc.DrawRectangle(new SolidColorBrush(backgroundColor), null, new Rect(0, 0, ImageSize, ImageSize));
 
             var circleGeometry = new EllipseGeometry(new Point(CenterX, CenterY), CircleRadius, CircleRadius);
             dc.DrawEllipse(null, new Pen(reticleBrush, 2), new Point(CenterX, CenterY), CircleRadius, CircleRadius);

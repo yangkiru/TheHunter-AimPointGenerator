@@ -30,11 +30,48 @@ public partial class MainWindow
         LabelFontSizeBox.TextChanged += (_, _) => OnLabelFontSizeChanged();
 
         Loaded += OnLoaded;
+        ThemeManager.ThemeChanged += () => RefreshImage();
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         TryLoadLastSaved();
+        SyncThemePickers();
+        SubscribeThemePickers();
+    }
+
+    private void SyncThemePickers()
+    {
+        try
+        {
+            var t = ThemeManager.Current;
+            ThemeImageReticle.SetColorFromHex(t.ImageReticle);
+            ThemeImageText.SetColorFromHex(t.ImageText);
+            ThemeImageBg.IncludeAlpha = true;
+            ThemeImageBg.SetColorFromHex(t.ImageBackground);
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Theme load: {ex.Message}";
+        }
+    }
+
+    private void SubscribeThemePickers()
+    {
+        ThemeImageReticle.ColorChanged += (_, c) => { ThemeManager.Current.ImageReticle = ColorHelper.ToHex(c); ThemeManager.Apply(); ThemeManager.Save(); };
+        ThemeImageText.ColorChanged += (_, c) => { ThemeManager.Current.ImageText = ColorHelper.ToHex(c); ThemeManager.Apply(); ThemeManager.Save(); };
+        ThemeImageBg.ColorChanged += (_, c) => { ThemeManager.Current.ImageBackground = ColorHelper.ToHex(c, true); ThemeManager.Apply(); ThemeManager.Save(); };
+    }
+
+    private void ThemeReset_Click(object sender, RoutedEventArgs e)
+    {
+        var t = ThemeManager.Current;
+        t.ImageReticle = "#00FF64";
+        t.ImageText = "#C8FFC8";
+        t.ImageBackground = "#DC001900";
+        ThemeManager.Apply();
+        ThemeManager.Save();
+        SyncThemePickers();
     }
 
     private void TryLoadLastSaved()

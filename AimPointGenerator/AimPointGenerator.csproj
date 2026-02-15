@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
@@ -9,15 +8,23 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>AimPointGenerator</RootNamespace>
     <AssemblyName>AimPointGenerator</AssemblyName>
+    <!-- Single-file publish: exe 한 개만 출력 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
-  <Target Name="ZipPublish" AfterTargets="Publish" Condition="'$(PublishProfile)'=='Simple'">
+  <Target Name="ZipPublishExeOnly" AfterTargets="Publish">
     <PropertyGroup>
       <ZipFileName>AimPointGenerator-v1.1.3-win-x64.zip</ZipFileName>
       <ZipPath>$(ProjectDir)..\$(ZipFileName)</ZipPath>
+      <ExeOnlyDir>$(ProjectDir)obj\publish-exe-only\</ExeOnlyDir>
     </PropertyGroup>
-    <ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(ZipPath)" Overwrite="true" />
-    <Message Importance="high" Text="Created: $(ZipPath)" />
+    <MakeDir Directories="$(ExeOnlyDir)" />
+    <Copy SourceFiles="$(PublishDir)$(AssemblyName).exe" DestinationFolder="$(ExeOnlyDir)" />
+    <ZipDirectory SourceDirectory="$(ExeOnlyDir)" DestinationFile="$(ZipPath)" Overwrite="true" />
+    <RemoveDir Directories="$(ExeOnlyDir)" />
+    <Message Importance="high" Text="Created: $(ZipPath) (exe only)" />
   </Target>
 
 </Project>
