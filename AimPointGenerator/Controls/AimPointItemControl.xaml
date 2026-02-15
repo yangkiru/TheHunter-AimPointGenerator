@@ -1,12 +1,14 @@
 <UserControl x:Class="AimPointGenerator.Controls.AimPointItemControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Border Background="{DynamicResource ThemeItemBackground}" CornerRadius="3" Padding="0" Margin="0,0,0,6">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True">
+    <Border Background="{DynamicResource ThemeItemBackground}" CornerRadius="3" Padding="0" Margin="0,0,4,6">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*" MinWidth="68"/>
-                <ColumnDefinition Width="*" MinWidth="68"/>
+                <ColumnDefinition Width="*" MinWidth="66"/>
+                <ColumnDefinition Width="*" MinWidth="66"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="58"/>
                 <ColumnDefinition Width="48"/>

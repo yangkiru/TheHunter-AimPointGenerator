@@ -212,7 +212,10 @@ public static class AimPointImageGenerator
             var y = centerY + offset;
 
             var lineLen = dotRadius * 1.2;
-            dc.DrawLine(new Pen(reticleBrush, 1), new Point(centerX - lineLen, y), new Point(centerX + lineLen, y));
+            var fractional = Math.Abs(aimPosition - Math.Truncate(aimPosition));
+            var isHalfStep = Math.Abs(fractional - 0.5) < 0.001;
+            var lineThickness = isHalfStep ? 3.0 : 1.0;
+            dc.DrawLine(new Pen(reticleBrush, lineThickness), new Point(centerX - lineLen, y), new Point(centerX + lineLen, y));
 
             var labels = group
                 .Where(m => m.ZeroingDistance != 0 || m.TargetDistance != 0)

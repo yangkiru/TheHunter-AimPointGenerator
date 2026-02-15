@@ -7,6 +7,8 @@
         MinWidth="1060" MinHeight="680"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
         Background="{DynamicResource ThemeWindowBackground}">
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -50,19 +52,19 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Scope Data" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" Margin="0,0,0,6"/>
+                            <TextBlock Grid.Row="0" Text="Scope Data" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" Margin="-2,0,0,6"/>
                             <StackPanel Grid.Row="1">
-                                <TextBlock Text="Ammunition Name" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="0,0,0,2"/>
+                                <TextBlock Text="Ammunition Name" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="-2,0,0,2"/>
                                 <TextBox x:Name="AmmunitionNameBox" Padding="6" Margin="0,0,0,10"
                                          Background="{DynamicResource ThemeTextBoxBackground}" Foreground="{DynamicResource ThemeTextBoxForeground}" CaretBrush="{DynamicResource ThemeTextBoxForeground}" BorderBrush="{DynamicResource ThemeTextBoxBorder}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="2">
-                                <TextBlock Text="Effective Range (m)" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="0,0,0,2"/>
+                                <TextBlock Text="Effective Range (m)" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="-2,0,0,2"/>
                                 <TextBox x:Name="EffectiveRangeBox" Padding="6" Margin="0,0,0,10"
                                          Background="{DynamicResource ThemeTextBoxBackground}" Foreground="{DynamicResource ThemeTextBoxForeground}" CaretBrush="{DynamicResource ThemeTextBoxForeground}" BorderBrush="{DynamicResource ThemeTextBoxBorder}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="3">
-                                <TextBlock Text="Scope Name" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="0,0,0,2"/>
+                                <TextBlock Text="Scope Name" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" Margin="-2,0,0,2"/>
                                 <TextBox x:Name="ScopeNameBox" Padding="6" Margin="0,0,0,0"
                                          Background="{DynamicResource ThemeTextBoxBackground}" Foreground="{DynamicResource ThemeTextBoxForeground}" CaretBrush="{DynamicResource ThemeTextBoxForeground}" BorderBrush="{DynamicResource ThemeTextBoxBorder}"/>
                             </StackPanel>
@@ -78,49 +80,54 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Aim Point Data" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" Margin="0,0,0,4"/>
+                            <TextBlock Grid.Row="0" Text="Aim Point Data" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" Margin="-2,0,0,4"/>
                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
-                                <TextBlock Text="Label Font Size" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Label Font Size" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="11" VerticalAlignment="Center" Margin="-2,0,8,0"/>
                                 <TextBox x:Name="LabelFontSizeBox" Text="8" Width="50" Padding="4" Margin="0,0,0,0"
                                          Background="{DynamicResource ThemeTextBoxBackground}" Foreground="{DynamicResource ThemeTextBoxForeground}" CaretBrush="{DynamicResource ThemeTextBoxForeground}" BorderBrush="{DynamicResource ThemeTextBoxBorder}"
                                          LostFocus="LabelFontSizeBox_LostFocus"/>
                             </StackPanel>
-                            <Grid Grid.Row="2" Margin="0,0,0,4" Width="{Binding ElementName=AimPointScrollViewer, Path=ViewportWidth}">
+                            <Grid Grid.Row="2" Margin="-1,0,5,4" Width="{Binding ElementName=AimPointScrollViewer, Path=ViewportWidth}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="16"/>
-                                    <ColumnDefinition Width="*" MinWidth="68"/>
-                                    <ColumnDefinition Width="*" MinWidth="68"/>
+                                    <ColumnDefinition Width="*" MinWidth="66"/>
+                                    <ColumnDefinition Width="*" MinWidth="66"/>
                                     <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="58"/>
                                     <ColumnDefinition Width="48"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="1" Text="    Target(m)" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="2" Text="   Zeroing(m)" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="3" Text=" Point" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
-                                <TextBlock Grid.Column="4" Text=" Zoom" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
+                                <TextBlock Grid.Column="1" Text="Target(m)" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Center" TextAlignment="Center" Margin="-5,0,0,0"/>
+                                <TextBlock Grid.Column="2" Text="Zeroing(m)" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Center" TextAlignment="Center" Margin="-5,0,0,0"/>
+                                <TextBlock Grid.Column="3" Text="Point" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Center" TextAlignment="Center" Margin="-9,0,0,0"/>
+                                <TextBlock Grid.Column="4" Text="Zoom" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Center" TextAlignment="Center" Margin="-9,0,0,0"/>
                                 <TextBlock Grid.Column="5" Text="" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="10" HorizontalAlignment="Left" TextAlignment="Left"/>
                             </Grid>
                             <ScrollViewer x:Name="AimPointScrollViewer" Grid.Row="3" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
-                                          Margin="0,4,0,0" Padding="0,4,4,4">
-                                <StackPanel x:Name="AimPointItemsPanel"/>
+                                          Margin="0,4,0,0" Padding="0,4,0,4">
+                                <StackPanel x:Name="AimPointItemsPanel" Width="{Binding ElementName=AimPointScrollViewer, Path=ViewportWidth}"/>
                             </ScrollViewer>
                             <Button Grid.Row="4" Content="Add Aim Point" Click="AddAimPoint_Click"
-                                    Padding="10,6" Margin="0,12,0,0"
+                                    Padding="10,6" Margin="0,12,6,0"
                                     Foreground="White" BorderThickness="0" Cursor="Hand"/>
                         </Grid>
                     </Border>
 
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0" HorizontalAlignment="Center">
-                        <Button Content="Load Data" Click="LoadData_Click"
-                                Padding="12,6" Margin="0,0,10,0" MinWidth="100"
+                    <Grid Grid.Row="2" Margin="0,4,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Load Data" Click="LoadData_Click"
+                                Padding="12,6" Margin="0,0,6,0" HorizontalAlignment="Stretch"
                                 Foreground="White" BorderThickness="0" Cursor="Hand"/>
-                        <Button Content="Save" Click="SaveData_Click"
-                                Padding="12,6" Margin="0,0,10,0" MinWidth="60"
+                        <Button Grid.Column="1" Content="Save" Click="SaveData_Click"
+                                Padding="12,6" Margin="6,0,6,0" HorizontalAlignment="Stretch"
                                 Foreground="White" BorderThickness="0" Cursor="Hand"/>
-                        <Button Content="Save As" Click="SaveDataAs_Click"
-                                Padding="12,6" Margin="0,0,10,0" MinWidth="120"
+                        <Button Grid.Column="2" Content="Save As" Click="SaveDataAs_Click"
+                                Padding="12,6" Margin="6,0,0,0" HorizontalAlignment="Stretch"
                                 Foreground="White" BorderThickness="0" Cursor="Hand"/>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
 
@@ -144,7 +151,7 @@
                                 <RowDefinition Height="*" MinHeight="80"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Combine Images" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" FontSize="11" Margin="0,0,0,4" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="0" Text="Combine Images" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" FontSize="11" Margin="-2,0,0,4" HorizontalAlignment="Center"/>
                             <ScrollViewer x:Name="CombineScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
                                           Margin="0,4,0,0" Padding="0,4,4,4">
                                 <StackPanel x:Name="CombineImagesPanel" Width="{Binding ElementName=CombineScrollViewer, Path=ViewportWidth}"/>
@@ -153,7 +160,7 @@
                                 <Button Content="Select Images" Click="SelectCombineImages_Click"
                                         Padding="10,6" MinHeight="30" Margin="0,0,0,6"
                                         Foreground="White" BorderThickness="0" Cursor="Hand"/>
-                                <TextBlock Text="Columns" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBlock Text="Columns" Foreground="{DynamicResource ThemeLabelForeground}" FontSize="10" Margin="-2,0,0,2"/>
                                 <TextBox x:Name="CombineColumnsBox" Text="4" Padding="6" Margin="0,0,0,6"
                                          Background="{DynamicResource ThemeTextBoxBackground}" Foreground="{DynamicResource ThemeTextBoxForeground}" CaretBrush="{DynamicResource ThemeTextBoxForeground}" BorderBrush="{DynamicResource ThemeTextBoxBorder}"/>
                                 <Button Content="Combine &amp; Save" Click="CombineImages_Click"
@@ -171,7 +178,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*" MinHeight="0"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Image Colors" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" FontSize="11" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="0" Text="Image Colors" Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontWeight="Bold" FontSize="11" Margin="-2,0,0,8"/>
                             <ScrollViewer x:Name="ImageColorsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,4,0,4" Margin="0,0,-5,0">
                                 <StackPanel Margin="2,0,2,0" HorizontalAlignment="Stretch">
                                     <controls:HueColorPicker x:Name="ThemeImageReticle" Label="Reticle" Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
@@ -193,7 +200,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="AimPoint Image" 
-                               Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="12" Margin="0,0,0,2"/>
+                               Foreground="{DynamicResource ThemeSectionHeaderForeground}" FontSize="12" Margin="-2,0,0,2"/>
                     <Border Grid.Row="1" Background="{DynamicResource ThemePanelInner}" BorderBrush="{DynamicResource ThemeBorderColor}" BorderThickness="2"
                             MinHeight="300" MinWidth="300" VerticalAlignment="Stretch">
                         <Image x:Name="OutputImage"
